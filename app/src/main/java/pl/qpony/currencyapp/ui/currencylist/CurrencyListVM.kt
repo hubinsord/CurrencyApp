@@ -9,11 +9,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import pl.qpony.currencyapp.data.model.Currency
 import pl.qpony.currencyapp.domain.CurrencyRepository
+import pl.qpony.currencyapp.util.DispatcherProvider
 import javax.inject.Inject
 
 @HiltViewModel
 class CurrencyListVM @Inject constructor(
-    private val repository: CurrencyRepository
+    private val repository: CurrencyRepository,
+    private val dispatchers: DispatcherProvider
 ) : ViewModel() {
 
     private val _currency = MutableLiveData<Currency>()
@@ -23,7 +25,7 @@ class CurrencyListVM @Inject constructor(
     val errorMessage: LiveData<String> get() = _errorMessage
 
     fun getRatesByDate() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch(dispatchers.io) {
             val response = repository.getRatesByDate()
             if (response.isSuccessful) {
                 _currency.postValue(response.body())
@@ -34,7 +36,7 @@ class CurrencyListVM @Inject constructor(
     }
 
     fun getLatestRates(){
-        viewModelScope.launch(Dispatchers.IO){
+        viewModelScope.launch(dispatchers.io){
             val response = repository.getLatestRates()
             if (response.isSuccessful) {
                 _currency.postValue(response.body())
