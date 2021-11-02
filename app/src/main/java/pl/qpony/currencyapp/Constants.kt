@@ -2,5 +2,6 @@ package pl.qpony.currencyapp
 
 object Constants {
 
-    const val FIXER_API_ACCESS_KEY = "aa8fb599b0053423d0d50917f0da414f"
+    const val FIXER_API_ACCESS_KEY = "c51b12a13601aadef5e7607bf5ee0d2a"
+    const val FIXER_BASE_URL = "http://data.fixer.io/api/"
 }
