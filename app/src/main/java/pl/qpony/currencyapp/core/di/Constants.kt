@@ -1,4 +1,4 @@
-package pl.qpony.currencyapp
+package pl.qpony.currencyapp.core.di
 
 object Constants {
 

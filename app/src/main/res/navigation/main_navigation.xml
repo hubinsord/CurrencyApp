@@ -7,9 +7,17 @@
     <fragment
         android:id="@+id/currencyListFragment"
         android:name="pl.qpony.currencyapp.ui.currencylist.CurrencyListFragment"
-        android:label="CurrencyListFragment" />
+        android:label="CurrencyListFragment" >
+        <action
+            android:id="@+id/action_currencyListFragment_to_currencyDetailFragment"
+            app:destination="@id/currencyDetailFragment" />
+    </fragment>
     <fragment
         android:id="@+id/currencyDetailFragment"
         android:name="pl.qpony.currencyapp.ui.currencydetail.CurrencyDetailFragment"
-        android:label="CurrencyDetailFragment" />
+        android:label="CurrencyDetailFragment" >
+        <action
+            android:id="@+id/action_currencyDetailFragment_to_currencyListFragment"
+            app:destination="@id/currencyListFragment" />
+    </fragment>
 </navigation>

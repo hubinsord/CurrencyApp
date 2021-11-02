@@ -5,11 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import pl.qpony.currencyapp.data.model.Currency
+import pl.qpony.currencyapp.data.model.CurrencyResponse
 import pl.qpony.currencyapp.domain.CurrencyRepository
-import pl.qpony.currencyapp.util.DispatcherProvider
+import pl.qpony.currencyapp.core.DispatcherProvider
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,8 +17,8 @@ class CurrencyListVM @Inject constructor(
     private val dispatchers: DispatcherProvider
 ) : ViewModel() {
 
-    private val _currency = MutableLiveData<Currency>()
-    val currency: LiveData<Currency> get() = _currency
+    private val _currency = MutableLiveData<CurrencyResponse>()
+    val currency: LiveData<CurrencyResponse> get() = _currency
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
@@ -35,8 +34,8 @@ class CurrencyListVM @Inject constructor(
         }
     }
 
-    fun getLatestRates(){
-        viewModelScope.launch(dispatchers.io){
+    fun getLatestRates() {
+        viewModelScope.launch(dispatchers.io) {
             val response = repository.getLatestRates()
             if (response.isSuccessful) {
                 _currency.postValue(response.body())

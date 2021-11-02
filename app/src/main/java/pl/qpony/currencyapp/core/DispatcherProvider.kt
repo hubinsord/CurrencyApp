@@ -1,4 +1,4 @@
-package pl.qpony.currencyapp.util
+package pl.qpony.currencyapp.core
 
 import kotlinx.coroutines.CoroutineDispatcher
 

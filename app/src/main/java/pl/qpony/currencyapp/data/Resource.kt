@@ -1,4 +1,4 @@
-package pl.qpony.currencyapp.util
+package pl.qpony.currencyapp.data
 
 sealed class Resource<T>( val data: T?, val message: String?) {
     class Success<T>(data: T) : Resource<T>(data, null)
