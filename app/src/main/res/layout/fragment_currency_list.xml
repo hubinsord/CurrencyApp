@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="viewModel"
+            type="pl.qpony.currencyapp.ui.currencylist.CurrencyListVM" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -27,6 +29,7 @@
             android:id="@+id/rv_currencies_rates"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            itemRecyclerView="@{viewModel.viewData}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

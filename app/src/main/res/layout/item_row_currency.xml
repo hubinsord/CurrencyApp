@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <variable
+            name="itemRecyclerView"
+            type="pl.qpony.currencyapp.data.model.ItemRowCurrency" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="35dp">
 
         <TextView
             android:gravity="center"
@@ -17,7 +19,8 @@
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:textColor="@color/black"
-            android:textSize="25sp"
+            android:text="@{itemRecyclerView.currency}"
+            android:textSize="20sp"
             android:layout_marginStart="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +33,8 @@
             android:layout_height="0dp"
             android:textColor="@color/black"
             android:gravity="center"
-            android:textSize="25sp"
+            android:text="@{itemRecyclerView.rate.toString()}"
+            android:textSize="20sp"
             android:layout_marginStart="100dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"

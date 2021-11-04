@@ -3,7 +3,6 @@ package pl.qpony.currencyapp.ui.currencylist
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
-import android.util.Log.i
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +21,7 @@ class CurrencyListFragment : Fragment(R.layout.fragment_currency_list) {
     private var _binding: FragmentCurrencyListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CurrencyListVM by viewModels()
-    private lateinit var adapter: CurrencyListAdapter
+    private lateinit var adapter: BindableRecyclerViewAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentCurrencyListBinding.inflate(inflater, container, false)
@@ -43,18 +42,14 @@ class CurrencyListFragment : Fragment(R.layout.fragment_currency_list) {
 
     private fun initViews() {
         viewModel.getLatestRates()
-        adapter = CurrencyListAdapter(listOf())
-        binding.rvCurrenciesRates.adapter = adapter
+        binding.viewModel = viewModel
         binding.rvCurrenciesRates.layoutManager = LinearLayoutManager(requireContext())
-
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private fun initObservers() {
         viewModel.currency.observe(viewLifecycleOwner, Observer {
-            adapter.
-            currencyRates = it.rates.toList()
-            adapter.notifyDataSetChanged()
+
         })
 
         viewModel.errorMessage.observe(viewLifecycleOwner, {
