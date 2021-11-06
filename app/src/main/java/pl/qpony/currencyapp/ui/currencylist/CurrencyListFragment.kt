@@ -2,15 +2,14 @@ package pl.qpony.currencyapp.ui.currencylist
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
+import android.util.Log.i
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
 import pl.qpony.currencyapp.R
 import pl.qpony.currencyapp.databinding.FragmentCurrencyListBinding
@@ -21,7 +20,7 @@ class CurrencyListFragment : Fragment(R.layout.fragment_currency_list) {
     private var _binding: FragmentCurrencyListBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CurrencyListVM by viewModels()
-    private lateinit var adapter: BindableRecyclerViewAdapter
+    private lateinit var  scrollListener: EndlessRecyclerViewScrollListener
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentCurrencyListBinding.inflate(inflater, container, false)
@@ -32,7 +31,6 @@ class CurrencyListFragment : Fragment(R.layout.fragment_currency_list) {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = this
         initViews()
-        initObservers()
     }
 
     override fun onDestroy() {
@@ -43,18 +41,20 @@ class CurrencyListFragment : Fragment(R.layout.fragment_currency_list) {
     private fun initViews() {
         viewModel.getLatestRates()
         binding.viewModel = viewModel
-        binding.rvCurrenciesRates.layoutManager = LinearLayoutManager(requireContext())
+        initRecyclerView()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun initObservers() {
-        viewModel.currency.observe(viewLifecycleOwner, Observer {
-
-        })
-
-        viewModel.errorMessage.observe(viewLifecycleOwner, {
-            Log.d("TAG", "error: $it")
-            Toast.makeText(requireContext(), it, Toast.LENGTH_LONG).show()
+    private fun initRecyclerView() {
+        val linearLayoutManager = LinearLayoutManager(requireContext())
+        binding.rvCurrenciesRates.layoutManager = linearLayoutManager
+        binding.rvCurrenciesRates.addOnScrollListener(object : EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            override fun onLoadMore(page: Int, totalItemsCount: Int, view: RecyclerView?) {
+                viewModel.getRatesByDate()
+            }
         })
     }
+
+//    private fun loadMoreData() {
+//        viewModel.getRatesByDate()
+//    }
 }

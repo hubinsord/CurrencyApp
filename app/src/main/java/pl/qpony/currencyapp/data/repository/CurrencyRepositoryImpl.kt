@@ -8,8 +8,8 @@ import javax.inject.Inject
 
 class CurrencyRepositoryImpl @Inject constructor(private val currencyApi: CurrencyApi) : CurrencyRepository {
 
-    override suspend fun getRatesByDate(): Response<CurrencyResponse> {
-        return currencyApi.getRatesByDate()
+    override suspend fun getRatesByDate(date:String): Response<CurrencyResponse> {
+        return currencyApi.getRatesByDate(date)
     }
 
     override suspend fun getLatestRates(): Response<CurrencyResponse> {

@@ -7,5 +7,5 @@ import java.math.BigDecimal
 
 class ItemRowCurrency(val currency: String, val rate: BigDecimal) : ItemRecyclerView {
     override val layoutId: Int = R.layout.item_row_currency
-    override val viewType: Int = CurrencyListVM.CURRENCY_RATE_ITEM
+    override val viewType: Int = CurrencyListVM.ROW_CURRENCY_RATE_ITEM
 }
