@@ -16,8 +16,6 @@ class AccessInterceptor : Interceptor {
         val url = originalHttpUrl.newBuilder()
             .addQueryParameter("access_key", Constants.FIXER_API_ACCESS_KEY)
             .build()
-
-        // Request customization: add request headers
         val requestBuilder: Request.Builder = original.newBuilder()
             .url(url)
         val request: Request = requestBuilder.build()

@@ -14,8 +14,11 @@ import pl.qpony.currencyapp.core.DispatcherProvider
 import pl.qpony.currencyapp.data.model.ItemHeaderDate
 import pl.qpony.currencyapp.data.model.ItemRowCurrency
 import pl.qpony.currencyapp.domain.ItemRecyclerView
+import java.text.ParseException
+import java.text.SimpleDateFormat
 import java.time.LocalDate
 import java.time.Period
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -26,6 +29,9 @@ class CurrencyListVM @Inject constructor(
 
     private val _currency = MutableLiveData<CurrencyResponse>()
     private val currency: LiveData<CurrencyResponse> get() = _currency
+
+    private val _currencyEvent = MutableLiveData<CurrencyEvent>(CurrencyEvent.LOADING)
+    val currencyEvent: LiveData<CurrencyEvent> get() = _currencyEvent
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
@@ -38,22 +44,26 @@ class CurrencyListVM @Inject constructor(
             if (currency.value == null) {
                 val response = repository.getLatestRates()
                 if (response.isSuccessful) {
+                    _currencyEvent.postValue(CurrencyEvent.DATA_LOADED)
                     _currency.postValue(response.body())
                     response.body()?.let { updateViewData(it) }
                 } else {
+                    _currencyEvent.postValue(CurrencyEvent.ERROR)
                     _errorMessage.postValue(response.errorBody().toString())
                 }
             }
         }
     }
 
-    fun getRatesByDate(date: String) {
+    private fun getRatesByDate(date: String) {
         viewModelScope.launch(dispatchers.io) {
             val response = repository.getRatesByDate(date)
             if (response.isSuccessful) {
+                _currencyEvent.postValue(CurrencyEvent.DATA_LOADED)
                 _currency.postValue(response.body())
                 response.body()?.let { updateViewData(it) }
             } else {
+                _currencyEvent.postValue(CurrencyEvent.ERROR)
                 _errorMessage.postValue(response.errorBody().toString())
             }
         }
@@ -71,10 +81,7 @@ class CurrencyListVM @Inject constructor(
         _viewData.postValue(viewDataToBeAdded)
     }
 
-    private fun createViewData(
-        list: MutableList<ItemRecyclerView>,
-        currencyResponse: CurrencyResponse,
-    ): MutableList<ItemRecyclerView> {
+    private fun createViewData(list: MutableList<ItemRecyclerView>, currencyResponse: CurrencyResponse): MutableList<ItemRecyclerView> {
         val itemHeaderDate = ItemHeaderDate(currencyResponse.date)
         list.add(itemHeaderDate)
         currencyResponse.rates.entries.forEach { it ->
@@ -84,12 +91,23 @@ class CurrencyListVM @Inject constructor(
         return list
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getDecrementedDate(): String {
-        val period = Period.of(0, 0, 1)
+    fun loadMoreData(){
+        _currencyEvent.postValue(CurrencyEvent.LOADING)
+        val decrementedDate = getDecrementedDate()
+        getRatesByDate(decrementedDate)
+    }
+
+    private fun getDecrementedDate(): String {
         val date = currency.value?.date
-        val dateMinusOneDay = LocalDate.parse(date).minus(period)
-        return dateMinusOneDay.toString()
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val cal = Calendar.getInstance()
+        try {
+            cal.time = simpleDateFormat.parse(date!!)!!
+        } catch (e: ParseException){
+            e.printStackTrace()
+        }
+        cal.add(Calendar.DATE, -1)
+        return simpleDateFormat.format(cal.time)
     }
 
     companion object {

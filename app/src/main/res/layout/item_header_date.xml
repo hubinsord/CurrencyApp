@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="itemRecyclerView"
             type="pl.qpony.currencyapp.data.model.ItemHeaderDate" />
@@ -11,7 +12,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="50dp"
+        android:background="@color/grey_300">
 
         <TextView
             android:layout_width="0dp"

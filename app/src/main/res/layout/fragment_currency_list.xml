@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
+        <import type="android.view.View" />
+        <import type="pl.qpony.currencyapp.ui.currencylist.CurrencyEvent" />
         <variable
             name="viewModel"
             type="pl.qpony.currencyapp.ui.currencylist.CurrencyListVM" />
@@ -20,9 +21,10 @@
         tools:context=".ui.currencylist.CurrencyListFragment">
 
         <ProgressBar
+            android:id="@+id/progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:visibility="@{viewModel.currencyEvent == CurrencyEvent.LOADING ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
