@@ -16,8 +16,8 @@
         android:id="@+id/currencyDetailFragment"
         android:name="pl.qpony.currencyapp.ui.currencydetail.CurrencyDetailFragment"
         android:label="CurrencyDetailFragment" >
-        <action
-            android:id="@+id/action_currencyDetailFragment_to_currencyListFragment"
-            app:destination="@id/currencyListFragment" />
+        <argument
+            android:name="itemRowCurrency"
+            app:argType="pl.qpony.currencyapp.data.model.ItemRowCurrency" />
     </fragment>
 </navigation>

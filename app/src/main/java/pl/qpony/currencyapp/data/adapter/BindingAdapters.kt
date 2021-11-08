@@ -6,12 +6,26 @@ import pl.qpony.currencyapp.domain.ItemRecyclerView
 import pl.qpony.currencyapp.ui.currencylist.BindableRecyclerViewAdapter
 
 @BindingAdapter("itemRecyclerView")
-fun bindItemViewModels(recyclerView: RecyclerView, itemsRecyclerView: List<ItemRecyclerView>?) {
+fun bindItemViewModels(
+    recyclerView: RecyclerView,
+    itemsRecyclerView: List<ItemRecyclerView>?,
+) {
     val adapter = getOrCreateAdapter(recyclerView)
     adapter.updateItems(itemsRecyclerView)
 }
 
-private fun getOrCreateAdapter(recyclerView: RecyclerView): BindableRecyclerViewAdapter {
+@BindingAdapter("itemListener")
+fun bindListener(
+    recyclerView: RecyclerView,
+    listener: BindableRecyclerViewAdapter.Companion.BindableRecyclerViewAdapterListener,
+) {
+    val adapter = getOrCreateAdapter(recyclerView)
+    adapter.initListener(listener)
+}
+
+private fun getOrCreateAdapter(
+    recyclerView: RecyclerView,
+): BindableRecyclerViewAdapter {
     return if (recyclerView.adapter != null && recyclerView.adapter is BindableRecyclerViewAdapter) {
         recyclerView.adapter as BindableRecyclerViewAdapter
     } else {
